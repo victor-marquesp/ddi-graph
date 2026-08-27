@@ -34,7 +34,7 @@ describe('login', function () {
         $this->post(
             route('auth.login'),
             ['email' => 'non.existent@email.com', 'password' => 'pest12345']
-        )->assertRedirect();;
+        )->assertRedirect();
 
         $this->assertGuest();
     });
@@ -122,7 +122,7 @@ describe('logout', function () {
 
     it("does not allow a guest to logout", function() {
         
-        $this->post(route('auth.logout'))->assertRedirect();
+        $this->post(route('auth.logout'))->assertRedirect(route('auth.required'));
 
         $this->assertGuest();
 
