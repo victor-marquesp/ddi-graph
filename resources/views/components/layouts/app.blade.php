@@ -15,7 +15,15 @@
     <x-layouts.navbar></x-layouts.navbar>
 
     <main class="container flex-grow-1 py-4">
+
+        @if (session('success'))
+            <x-ui.alert type="success">{{ session('success') }}</x-ui.alert>
+        @elseif (session('error'))
+            <x-ui.alert type="danger">{{ session('error') }}</x-ui.alert>
+        @endif
+
         {{ $slot }}   
+
     </main>
 
     <footer></footer>

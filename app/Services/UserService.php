@@ -35,13 +35,6 @@ class UserService {
     }
 
     public function delete(Request $request, User $user) : void {
-
-        if(auth()->id() === $user->id) {
-            
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
             
         if(User::count() < 2) {
             throw new NotEnoughUsersException('Less than 2 Users ');

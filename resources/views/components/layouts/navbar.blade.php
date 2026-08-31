@@ -21,6 +21,7 @@
 
             {{-- Navegação --}}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                 <li class="nav-item">
                     <a
                         class="nav-link active"
@@ -30,6 +31,17 @@
                         Home
                     </a>
                 </li>
+
+                @auth
+                    <li class="nav-item"></li>   
+                    <a
+                        class="nav-link active"
+                        aria-current="page"
+                        href="{{ route('users.index') }}"
+                    >
+                        Users
+                    </a> 
+                @endauth
             </ul>
 
             {{-- Autenticação --}}
@@ -49,7 +61,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}">
                                     Perfil
                                 </a>
                             </li>

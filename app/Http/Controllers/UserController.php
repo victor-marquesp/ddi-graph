@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\User;
 
 use App\Http\Requests\User\UpdateUserRequest;
@@ -11,7 +14,6 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Services\UserService;
 use App\DTOs\UserDTO;
 use App\Exceptions\NotEnoughUsersException;
-use Illuminate\Http\Request;
 
 class UserController extends Controller {
 
@@ -69,6 +71,13 @@ class UserController extends Controller {
 
             $this->userService->delete(request: $request, user: $user);
 
+            if(auth()->id() === $user->id) {
+            
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+            
         } catch (NotEnoughUsersException $e) {
             return redirect()->route('users.index')->with('error', 'Cannot delete last user');
         }

@@ -12,7 +12,13 @@ class UserSeeder extends Seeder {
     public function run() : void {
         
         $data = [
-            ['name' => 'admin TEST', 'email' => 'admin.test@gmail.com', 'password' => Hash::make('@1234@5678')]
+            [
+                'name' => 'admin TEST', 
+                'email' => 'admin.test@email.com', 
+                'password' => Hash::make('@1234@5678'),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
         ];
 
         DB::table('users')->insert($data);
