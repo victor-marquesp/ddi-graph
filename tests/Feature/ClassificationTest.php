@@ -174,7 +174,7 @@ describe('update', function () {
         
         $this->assertDatabaseHas('classifications', [
             'name' => 'Analgesic',
-            'description' => 'null'
+            'description' => null
         ]);
     });
 
@@ -192,7 +192,7 @@ describe('update', function () {
         
         $this->assertDatabaseHas('classifications', [
             'name' => 'Analgesic',
-            'description' => 'null'
+            'description' => null
         ]);
     });
 
@@ -208,7 +208,7 @@ describe('update', function () {
             'name' => 'Analgesic'
         ];
 
-        $this->put(route('classifications.store', $classification), $data)
+        $this->put(route('classifications.update', $classification), $data)
             ->assertSessionHasErrors([
                 'name'
         ]);

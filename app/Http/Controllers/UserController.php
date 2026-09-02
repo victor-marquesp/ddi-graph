@@ -69,7 +69,7 @@ class UserController extends Controller {
 
         try {
 
-            $this->userService->delete(request: $request, user: $user);
+            $this->userService->delete(user: $user);
 
             if(auth()->id() === $user->id) {
             
