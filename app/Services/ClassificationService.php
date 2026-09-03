@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Classification;
 use App\DTOs\ClassificationDTO;
+use App\Exceptions\ThisClassificationHasDrugsException;
 
 class ClassificationService {
 
@@ -30,6 +31,11 @@ class ClassificationService {
     }
 
     public function delete(Classification $classification) : void {
+
+        if($classification->drugs()->exists()) {
+            throw new ThisClassificationHasDrugsException('This classification has drugs associated');
+        }
+
         $classification->delete();
     }
 

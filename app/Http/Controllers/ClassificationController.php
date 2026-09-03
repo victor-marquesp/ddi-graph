@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\ClassificationDTO;
+use App\Exceptions\ThisClassificationHasDrugsException;
 use App\Http\Requests\Classification\StoreClassificationRequest;
 use App\Http\Requests\Classification\UpdateClassificationRequest;
 use App\Models\Classification;
@@ -60,8 +61,14 @@ class ClassificationController extends Controller {
 
     public function destroy(Classification $classification) {
         
-        $this->classificationService->delete($classification);
+        try {
+            $this->classificationService->delete($classification);
 
-        return redirect()->route('classifications.index')->with('success', 'Classification Deleted');
+            return redirect()->route('classifications.index')->with('success', 'Classification Deleted');
+        } catch (ThisClassificationHasDrugsException $e) {
+            return redirect()
+                    ->route('classifications.show', $classification)
+                    ->with('error', 'Cannot delete: this classification has drugs associated');
+        }
     }
 }

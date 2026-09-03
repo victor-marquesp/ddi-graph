@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Classification extends Model {
 
@@ -14,4 +15,8 @@ class Classification extends Model {
         'name',
         'description'
     ];
+
+    public function drugs() : HasMany {
+        return $this->hasMany(Drug::class);
+    }
 }

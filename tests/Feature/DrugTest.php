@@ -219,7 +219,7 @@ describe('delete', function () {
             'name' => 'Paracetamol'
         ]);
 
-        $this->delete(route('drugs.delete', $drug))->assertRedirect();
+        $this->delete(route('drugs.destroy', $drug))->assertRedirect();
 
         $this->assertDatabaseMissing('drugs', ['id' => $drug->id]);
     });
@@ -230,7 +230,7 @@ describe('delete', function () {
             'name' => 'Paracetamol'
         ]);
 
-        $this->delete(route('drugs.delete', $drug))->assertRedirect(route('auth.required'));
+        $this->delete(route('drugs.destroy', $drug))->assertRedirect(route('auth.required'));
 
         $this->assertDatabaseHas('drugs', ['id' => $drug->id]);
     });
