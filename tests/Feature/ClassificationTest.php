@@ -37,7 +37,7 @@ describe('create', function () {
         $this->get(route('classifications.create'))->assertOk();
     });
 
-    it('does not shows the create form when guest', function () {
+    it('does not shows the create form to guests', function () {
 
         $this->get(route('classifications.create'))->assertRedirect(route('auth.required'));
 
