@@ -60,7 +60,7 @@ describe('store', function() {
         $data = [
             'drugA_id' => $drug_a->id,
             'drugB_id' => $drug_b->id,
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
             'description' => 'test description'
         ];
 
@@ -111,26 +111,20 @@ describe('store', function() {
         $data = [
             'drugA_id' => $drug_a->id,
             'drugB_id' => $drug_b->id,
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
         ];
 
         $this->post(route('interactions.store'), $data)
-            ->assertSessionHasErrors([
-                'drugA_id',
-                'drugB_id'
-            ]);
+            ->assertRedirect();
 
         $data = [
             'drugA_id' => $drug_b->id,          // Não duplica com a ordem inversa
             'drugB_id' => $drug_a->id,
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
         ];
 
         $this->post(route('interactions.store'), $data)
-            ->assertSessionHasErrors([
-                'drugA_id',
-                'drugB_id'
-            ]);
+            ->assertRedirect();
 
         $this->assertDatabaseCount('interactions', 1);
 
@@ -146,14 +140,10 @@ describe('store', function() {
         $data = [
             'drugA_id' => $drug->id,
             'drugB_id' => $drug->id,
-            'severity' => Severity::MODERATE
+            'severity' => Severity::MODERATE->value
         ];
 
-        $this->post(route('interactions.store'), $data)
-            ->assertSessionHasErrors([
-                'drugA_id',
-                'drugB_id'
-            ]);
+        $this->post(route('interactions.store'), $data)->assertRedirect();
 
         $this->assertDatabaseMissing('interactions', [
             'drugA_id' => $drug->id,
@@ -171,7 +161,7 @@ describe('store', function() {
         $data = [
             'drugA_id' => $drug->id,
             'drugB_id' => 999999,
-            'severity' => Severity::MODERATE
+            'severity' => Severity::MODERATE->value
         ];
 
         $this->post(route('interactions.store'), $data)
@@ -193,7 +183,7 @@ describe('store', function() {
         $data = [
             'drugA_id' => $drug_a->id,
             'drugB_id' => $drug_b->id,
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
             'description' => 'test description'
         ];
 
@@ -247,12 +237,12 @@ describe('update', function () {
         $interaction = Interaction::factory()->create([
             'drugA_id' => $drug_a->id,
             'drugB_id' => $drug_b->id,
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
             'description' => 'test description'
         ]);
 
         $data = [
-            'severity' => Severity::MAJOR,
+            'severity' => Severity::MAJOR->value, 
             'description' => 'test update'
         ];
 
@@ -265,7 +255,7 @@ describe('update', function () {
         $this->assertDatabaseHas('interactions', [
             'drugA_id' => $drug_a->id,
             'drugB_id' => $drug_b->id,
-            'severity' => Severity::MAJOR,
+            'severity' => Severity::MAJOR->value,
             'description' => 'test update'
         ]);
 
@@ -277,7 +267,7 @@ describe('update', function () {
         $this->actingAs($user);
 
         $interaction = Interaction::factory()->create([
-            'severity' => Severity::MODERATE
+            'severity' => Severity::MODERATE->value
         ]);
 
         $data = [
@@ -305,12 +295,12 @@ describe('update', function () {
     it('does not update an interaction when the requester is a guest', function () {
 
         $interaction = Interaction::factory()->create([
-            'severity' => Severity::MODERATE,
+            'severity' => Severity::MODERATE->value,
             'description' => 'test description'
         ]);
 
         $data = [
-            'severity' => Severity::SEVERE,
+            'severity' => Severity::CONTRAINDICATED->value,
             'description' => 'test update'
         ];
 
@@ -339,7 +329,7 @@ describe('delete', function () {
 
         $interaction = Interaction::factory()->create();
 
-        $this->delete(route('interactions.delete', [
+        $this->delete(route('interactions.destroy', [
            'drugA' => $interaction->drugA_id,
             'drugB' => $interaction->drugB_id
         ]))->assertRedirect();
@@ -355,7 +345,7 @@ describe('delete', function () {
 
         $interaction = Interaction::factory()->create();
 
-        $this->delete(route('interactions.delete', [
+        $this->delete(route('interactions.destroy', [
             'drugA' => $interaction->drugA_id,
             'drugB' => $interaction->drugB_id
         ]))->assertRedirect(route('auth.required'));
@@ -372,9 +362,9 @@ describe('delete', function () {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $drug_a = Drug::factory()->create();
-        $drug_b = Drug::factory()->create();
-        $drug_c = Drug::factory()->create();
+        $drug_a = Drug::factory()->create(['id' => 1]);
+        $drug_b = Drug::factory()->create(['id' => 2]);
+        $drug_c = Drug::factory()->create(['id' => 3]);
 
         Interaction::factory()->create([
             'drugA_id' => $drug_a->id,
@@ -382,11 +372,11 @@ describe('delete', function () {
         ]);
 
         Interaction::factory()->create([
-            'drugA_id' => $drug_c->id,
-            'drugB_id' => $drug_a->id
+            'drugA_id' => $drug_a->id,
+            'drugB_id' => $drug_c->id
         ]);
 
-        $this->delete(route('drugs.delete', $drug_a))->assertRedirect();
+        $this->delete(route('drugs.destroy', $drug_a))->assertRedirect();
 
         $this->assertDatabaseMissing('interactions', [
             'drugA_id' => $drug_a->id

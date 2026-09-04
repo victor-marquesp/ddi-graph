@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\DrugController;
+use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,10 +14,10 @@ Route::controller(ClassificationController::class)->group(function () {
     Route::get('/classifications', 'index')->name('classifications.index');
     Route::get('/classifications/create', 'create')->name('classifications.create')->middleware('auth');
     Route::get('/classifications/{classification}', 'show')->name('classifications.show');
-    Route::get('/classifications/{classification}/edit', 'edit')->name('classifications.edit')->middleware('auth');;
-    Route::post('/classifications', 'store')->name('classifications.store')->middleware('auth');;
-    Route::put('/classifications/{classification}', 'update')->name('classifications.update')->middleware('auth');;
-    Route::delete('/classifications/{classification}', 'destroy')->name('classifications.destroy')->middleware('auth');;
+    Route::get('/classifications/{classification}/edit', 'edit')->name('classifications.edit')->middleware('auth');
+    Route::post('/classifications', 'store')->name('classifications.store')->middleware('auth');
+    Route::put('/classifications/{classification}', 'update')->name('classifications.update')->middleware('auth');
+    Route::delete('/classifications/{classification}', 'destroy')->name('classifications.destroy')->middleware('auth');
 
 });
 
@@ -25,10 +26,22 @@ Route::controller(DrugController::class)->group(function () {
     Route::get('/drugs', 'index')->name('drugs.index');
     Route::get('/drugs/create', 'create')->name('drugs.create')->middleware('auth');
     Route::get('/drugs/{drug}', 'show')->name('drugs.show');
-    Route::get('/drugs/{drug}/edit', 'edit')->name('drugs.edit')->middleware('auth');;
-    Route::post('/drugs', 'store')->name('drugs.store')->middleware('auth');;
-    Route::put('/drugs/{drug}', 'update')->name('drugs.update')->middleware('auth');;
-    Route::delete('/drugs/{drug}', 'destroy')->name('drugs.destroy')->middleware('auth');;
+    Route::get('/drugs/{drug}/edit', 'edit')->name('drugs.edit')->middleware('auth');
+    Route::post('/drugs', 'store')->name('drugs.store')->middleware('auth');
+    Route::put('/drugs/{drug}', 'update')->name('drugs.update')->middleware('auth');
+    Route::delete('/drugs/{drug}', 'destroy')->name('drugs.destroy')->middleware('auth');
+
+});
+
+Route::controller(InteractionController::class)->group(function () {
+
+    Route::get('/interactions', 'index')->name('interactions.index');
+    Route::get('/interactions/create', 'create')->name('interactions.create')->middleware('auth');
+    Route::get('/interactions/{drugA}/{drugB}', 'show')->name('interactions.show');
+    Route::get('/interactions/{drugA}/{drugB}/edit', 'edit')->name('interactions.edit')->middleware('auth');
+    Route::post('/interactions', 'store')->name('interactions.store')->middleware('auth');
+    Route::put('/interactions/{drugA}/{drugB}', 'update')->name('interactions.update')->middleware('auth');
+    Route::delete('/interactions/{drugA}/{drugB}', 'destroy')->name('interactions.destroy')->middleware('auth');
 
 });
 

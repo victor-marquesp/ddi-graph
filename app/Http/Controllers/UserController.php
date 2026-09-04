@@ -70,16 +70,16 @@ class UserController extends Controller {
         try {
 
             $this->userService->delete(user: $user);
-
-            if(auth()->id() === $user->id) {
-            
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-            }
             
         } catch (NotEnoughUsersException $e) {
             return redirect()->route('users.index')->with('error', 'Cannot delete last user');
+        }
+
+        if(auth()->id() === $user->id) {
+            
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         return redirect()->route('users.index')->with('user', 'User deleted');

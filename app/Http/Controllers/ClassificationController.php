@@ -62,13 +62,16 @@ class ClassificationController extends Controller {
     public function destroy(Classification $classification) {
         
         try {
+
             $this->classificationService->delete($classification);
 
-            return redirect()->route('classifications.index')->with('success', 'Classification Deleted');
         } catch (ThisClassificationHasDrugsException $e) {
+            
             return redirect()
-                    ->route('classifications.show', $classification)
-                    ->with('error', 'Cannot delete: this classification has drugs associated');
+                ->route('classifications.show', $classification)
+                ->with('error', 'Cannot delete: this classification has drugs associated');
         }
+
+        return redirect()->route('classifications.index')->with('success', 'Classification Deleted');
     }
 }
