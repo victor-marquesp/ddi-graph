@@ -21,7 +21,7 @@
                     <dd class="col-sm-9">{{ $classification->name }}</dd>
 
                     <dt class="col-sm-3">Descrição</dt>
-                    <dd class="col-sm-9">{{ $classification->desc ?? 'sem desc' }}</dd>
+                    <dd class="col-sm-9">{{ $classification->description ?? 'sem desc' }}</dd>
 
                     <dt class="col-sm-3">Created at</dt>
                     <dd class="col-sm-9">{{ $classification->created_at }}</dd>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="{{ route('classifications.edit', $classification) }}" class="btn btn-primary">
+                <a href="{{ route('classifications.edit', $classification) }}" class="btn btn-warning">
                     Edit
                 </a>
 

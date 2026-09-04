@@ -15,9 +15,9 @@
                 Descrição
                 <span class="text-muted small">(opcional)</span>
             </label>
-            <input type="text" id="name" name="name" class="form-control" />
-        <div class="mb-3">
-    
+            <input type="text" id="description" name="description" class="form-control" />
+        </div>
+            
         <button type="submit" class="btn btn-success">Criar</button>
 
     </form>

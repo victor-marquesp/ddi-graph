@@ -45,7 +45,7 @@ class DrugController extends Controller{
     public function edit(Drug $drug) {
         $classifications = Classification::all();
         
-        return view('drugs.create', compact('drug', 'classifications'));
+        return view('drugs.edit', compact('drug', 'classifications'));
     }
 
     public function update(UpdateDrugRequest $request, Drug $drug) {

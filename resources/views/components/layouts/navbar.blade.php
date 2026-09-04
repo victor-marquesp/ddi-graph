@@ -37,6 +37,30 @@
                     <a
                         class="nav-link active"
                         aria-current="page"
+                        href="{{ route('classifications.index') }}"
+                    >
+                        Classificações
+                    </a> 
+                    <li class="nav-item"></li>   
+                    <a
+                        class="nav-link active"
+                        aria-current="page"
+                        href="{{ route('drugs.index') }}"
+                    >
+                        Remédios
+                    </a> 
+                    <li class="nav-item"></li>   
+                    <a
+                        class="nav-link active"
+                        aria-current="page"
+                        href="{{ route('interactions.index') }}"
+                    >
+                        Interações
+                    </a> 
+                    <li class="nav-item"></li>   
+                    <a
+                        class="nav-link active"
+                        aria-current="page"
                         href="{{ route('users.index') }}"
                     >
                         Users

@@ -4,7 +4,7 @@
 
     <x-ui.page-header title="Classificações">
         <x-slot:action>
-            <a href="{{ route('classifications.create') }}" class="btn btn-primary">Nova Classificação</a>
+            <a href="{{ route('classifications.create') }}" class="btn btn-success">Nova Classificação</a>
         </x-slot:action>
     </x-ui.page-header>
 
