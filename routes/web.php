@@ -3,11 +3,14 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\DrugController;
+use App\Http\Controllers\GraphController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('welcome');
+
+// --- Resource ---
 
 Route::controller(ClassificationController::class)->group(function () {
 
@@ -44,6 +47,11 @@ Route::controller(InteractionController::class)->group(function () {
     Route::delete('/interactions/{drugA}/{drugB}', 'destroy')->name('interactions.destroy')->middleware('auth');
 
 });
+
+// --- Graph ---
+
+Route::get('/graph/all', [GraphController::class, 'index'])->name('graph.all');
+// Route::get('/graph/{dont know yet}', [GraphController::class, 'show'])->name('graph.specific');
 
 // --- Admin --- 
 

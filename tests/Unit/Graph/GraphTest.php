@@ -2,10 +2,10 @@
 
 use App\Enums\Severity;
 
-use App\Exceptions\InvalidNodeException;
-use App\Exceptions\InvalidEdgeException;
-use App\Exceptions\NonExistentNodeException;
-use App\Exceptions\NonExistentEdgeException;
+use App\Exceptions\Graph\InvalidNodeException;
+use App\Exceptions\Graph\InvalidEdgeException;
+use App\Exceptions\Graph\NodeNotFoundException;
+use App\Exceptions\Graph\EdgeNotFoundException;
 
 use App\Graph\AdjacencyList;
 use App\Graph\Edge;
@@ -19,12 +19,12 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
 
-    $this->classification = Classification::factory()->create();
+    $this->classification = new Classification(['name' => 'Test']);
 
 });
 
 it('add nodes', function () {
-
+    
     $nodeA = new Node(
         id: 1, 
         classification: $this->classification, 
@@ -98,12 +98,14 @@ it('does not add edges with duplicate IDs', function () {
     $nodeB = new Node(2, $this->classification);
     $nodeC = new Node(3, $this->classification);
 
+    $validEdge = new Edge(1, $nodeA, $nodeB, Severity::MINOR);
     $invalidEdge = new Edge(1, $nodeA, $nodeC, Severity::MAJOR);
 
     $graph = new Graph(new AdjacencyList());
     $graph->addNode($nodeA);
     $graph->addNode($nodeB);
     $graph->addNode($nodeC);
+    $graph->addEdge($validEdge);
 
     expect(fn() => $graph->addEdge($invalidEdge))->toThrow(InvalidEdgeException::class);
 
@@ -126,8 +128,9 @@ it('does not add duplicate edges', function () {
 
     $nodeA = new Node(1, $this->classification);
     $nodeB = new Node(2, $this->classification);
-    $validEdge = new Edge(1, $nodeA, $nodeB);
-    $duplicatedEdge = new Edge(2, $nodeA, $nodeB);
+    $validEdge = new Edge(1, $nodeA, $nodeB, Severity::MINOR);
+    $duplicatedEdge = new Edge(2, $nodeA, $nodeB, Severity::MINOR);
+    $invertedEdge = new Edge(3, $nodeB, $nodeA, Severity::MINOR);
 
     $graph = new Graph(new AdjacencyList());
 
@@ -137,13 +140,14 @@ it('does not add duplicate edges', function () {
     $graph->addEdge($validEdge);
 
     expect(fn() => $graph->addEdge($duplicatedEdge))->toThrow(InvalidEdgeException::class);
+    expect(fn() => $graph->addEdge($invertedEdge))->toThrow(InvalidEdgeException::class);
 
 });
 
 it('does not add self-loops', function () {
 
     $nodeA = new Node(1, $this->classification);
-    $selfEdge = new Edge(1, $nodeA, $nodeA);
+    $selfEdge = new Edge(1, $nodeA, $nodeA, Severity::MINOR);
 
     $graph = new Graph(new AdjacencyList());
     $graph->addNode($nodeA);
@@ -182,7 +186,7 @@ test('utilities methods works', function () {
     expect($graph->edgeCount())->toBe(4);
 
     expect($graph->hasEdge(1, 2))->toBe($edgeAB);
-    expect($graph->hasEdge(1, 5))->toBe(false);
+    expect($graph->hasEdge(1, 5))->toBe(null);
 
     expect(
         $graph->neighbors(1)
@@ -206,13 +210,13 @@ test('utilities methods works on empty graph', function () {
     expect($graph->nodeCount())->toBe(0);
     expect($graph->edgeCount())->toBe(0);
 
-    expect(fn() => $graph->getNode(1))->toThrow(NonExistentNodeException::class);
-    expect(fn() => $graph->getEdge(1))->toThrow(NonExistentEdgeException::class);
+    expect(fn() => $graph->getNode(1))->toThrow(NodeNotFoundException::class);
+    expect(fn() => $graph->getEdge(1))->toThrow(EdgeNotFoundException::class);
 
-    expect(fn() => $graph->hasEdge(1, 2))->toThrow(NonExistentNodeException::class);
-    expect(fn() => $graph->neighbors(1))->toThrow(NonExistentNodeException::class);
-    expect(fn() => $graph->incidentEdges(1))->toThrow(NonExistentNodeException::class);
-    expect(fn() => $graph->degree(1))->toThrow(NonExistentNodeException::class);
+    expect(fn() => $graph->hasEdge(1, 2))->toThrow(NodeNotFoundException::class);
+    expect(fn() => $graph->neighbors(1))->toThrow(NodeNotFoundException::class);
+    expect(fn() => $graph->incidentEdges(1))->toThrow(NodeNotFoundException::class);
+    expect(fn() => $graph->degree(1))->toThrow(NodeNotFoundException::class);
 
 });
 

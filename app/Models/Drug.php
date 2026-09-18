@@ -20,4 +20,14 @@ class Drug extends Model {
     public function classification() : BelongsTo {
         return $this->belongsTo(Classification::class);
     }
+
+    /** @return array<string, mixed> */
+    public function toNodeProperties() : array {
+        
+        return [
+            'name' => $this->name,
+            'description' => $this->description
+        ];
+    }
+
 }

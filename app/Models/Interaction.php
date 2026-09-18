@@ -34,5 +34,13 @@ class Interaction extends Model {
     public function drugB() : BelongsTo {
         return $this->belongsTo(Drug::class, 'drugB_id');
     }
+
+    /** @return array<string, mixed> */
+    public function toEdgeProperties() : array {
+        
+        return [
+            'description' => $this->description
+        ];
+    }
     
 }
