@@ -13,6 +13,9 @@ use App\Graph\Graph;
 use App\Graph\Node;
 
 use App\Models\Classification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
 
