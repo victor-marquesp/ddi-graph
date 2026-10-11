@@ -13,7 +13,7 @@ class GraphBuilder {
         $representation = new AdjacencyList();
 
         $graph = new Graph($representation);
-
+        
         foreach($drugs as $drug) {
 
             $node = new Node(
@@ -26,7 +26,7 @@ class GraphBuilder {
             $graph->addNode($node);
 
         }
-
+        
         $id = 1;
         foreach($interactions as $interaction) {
             
@@ -42,7 +42,7 @@ class GraphBuilder {
 
             $id++;
         }
-
+        
         return $graph;
 
     }

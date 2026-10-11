@@ -50,8 +50,8 @@ Route::controller(InteractionController::class)->group(function () {
 
 // --- Graph ---
 
-Route::get('/graph/all', [GraphController::class, 'index'])->name('graph.all');
-// Route::get('/graph/{dont know yet}', [GraphController::class, 'show'])->name('graph.specific');
+Route::get('/graph/all', [GraphController::class, 'all'])->name('graph.all');
+Route::get('/graph/selected', [GraphController::class, 'selected'])->name('graph.selected');
 
 // --- Admin --- 
 
