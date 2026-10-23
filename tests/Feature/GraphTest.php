@@ -25,9 +25,9 @@ test('generate specific graph route works', function () {
         $drugIds[] = $interaction->drugB_id;
     }
 
-    $response = $this->get('/graph/selected?' . http_build_query([
-        'drug_ids' => $drugIds,
-    ]));
+    $response = $this->get(
+        route('graph.selected') .'?' .http_build_query(['drug_ids' => $drugIds])
+    );
 
     $response->assertOk();
 
