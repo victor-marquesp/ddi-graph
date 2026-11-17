@@ -4,10 +4,15 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\DrugController;
 use App\Http\Controllers\GraphController;
+use App\Http\Controllers\SelectionController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+// --- Views Públicas ---
+
+Route::get('/selection', [SelectionController::class, 'index'])->name('selection');
 
 Route::view('/', 'welcome')->name('welcome');
 

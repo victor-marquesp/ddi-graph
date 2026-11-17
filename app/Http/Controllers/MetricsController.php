@@ -23,7 +23,7 @@ class MetricsController extends Controller {
 
         $result = $this->graphMetrics->calculate($graph);
         
-        return view('graph.dashboard', compact('result'));
+        return view('graph.dashboard', compact('result', 'graph'));
     }
 
     public function selected(SelectedGraphRequest $request) {
@@ -35,7 +35,7 @@ class MetricsController extends Controller {
 
         $result = $this->graphMetrics->calculate($graph);
 
-        return view('graph.dashboard', compact('result'));
+        return view('graph.dashboard', compact('result', 'graph'));
     }
 
 }
