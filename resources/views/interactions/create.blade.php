@@ -1,50 +1,93 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Nova Interação</x-slot:title>
+@section('title', 'Cadastrar interação')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('interactions.store') }}">
-        @csrf
+@section('content')
 
-        <div class="mb-3">
-            <label for="drugA" class="form-label">Medicamento A</label>
-            <select id="drugA" name="drugA_id" class="form-select" required>
-                @foreach ($drugs as $drug)
-                    <option value="{{ $drug->id }}">{{ $drug->name }}</option>                    
-                @endforeach
-            </select>
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Interações',
+            'href' => route('interactions.index'),
+        ],
+        [
+            'label' => 'Cadastrar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="drugB" class="form-label">Medicamento B</label>
-            <select id="drugB" name="drugB_id" class="form-select" required>
-                @foreach ($drugs as $drug)
-                    <option value="{{ $drug->id }}">{{ $drug->name }}</option>                    
-                @endforeach
-            </select>
-        </div>
+    <x-layout.page-header
+        title="Cadastrar interação"
+        description="Registre uma interação entre dois medicamentos."
+        icon="network"
+    />
 
+    <x-ui.card title="Dados da interação">
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" id="description" name="description" class="form-control" />
-        </div>
+        @if ($drugs->count() < 2)
 
-        <div class="mb-3">
-            <label for="severity" class="form-label"></label>
-            <select id="severity" name="severity" class="form-select">
-                @foreach (App\Enums\Severity::cases() as $severity)
-                    <option value="{{ $severity }}">
-                        {{ $severity }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-            
-        <button type="submit" class="btn btn-success">Salvar</button>
+            <div class="stack">
 
-    </form>
+                <x-ui.alert variant="warning">
 
-</x-layouts.app>
+                    É necessário possuir pelo menos dois
+                    medicamentos cadastrados para registrar
+                    uma interação.
+
+                </x-ui.alert>
+
+                <div class="cluster">
+
+                    <x-ui.button :href="route('drugs.create')">
+
+                        Cadastrar medicamento
+
+                    </x-ui.button>
+
+                    <x-ui.button
+                        variant="secondary"
+                        :href="route('interactions.index')">
+
+                        Voltar
+
+                    </x-ui.button>
+
+                </div>
+
+            </div>
+
+        @else
+
+            <form
+                method="POST"
+                action="{{ route('interactions.store') }}"
+                class="form">
+
+                @csrf
+
+                @include('interactions._form')
+
+                <div class="form__actions">
+
+                    <x-ui.button
+                        variant="secondary"
+                        :href="route('interactions.index')">
+
+                        Cancelar
+
+                    </x-ui.button>
+
+                    <x-ui.button type="submit">
+
+                        Cadastrar interação
+
+                    </x-ui.button>
+
+                </div>
+
+            </form>
+
+        @endif
+
+    </x-ui.card>
+
+@endsection

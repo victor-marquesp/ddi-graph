@@ -1,0 +1,133 @@
+.graph {
+    min-width: 0;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.graph__viewport {
+    position: relative;
+    isolation: isolate;
+}
+
+.graph__canvas {
+    width: 100%;
+    height: 560px;
+
+    background-color: var(--color-background);
+    background-image: radial-gradient(
+        var(--color-border-strong) 1px,
+        transparent 1px
+    );
+    background-size: 20px 20px;
+}
+
+.graph--preview .graph__canvas {
+    height: 320px;
+}
+
+.graph__toolbar {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.graph__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.graph__control:hover:not(:disabled) {
+    background: var(--color-muted);
+}
+
+.graph__control:disabled {
+    opacity: 0.5;
+}
+
+.graph__legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+
+    padding: var(--space-4);
+    border-top: 1px solid var(--color-border);
+}
+
+.graph__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.graph__legend-line {
+    width: 24px;
+    height: 3px;
+    border-radius: var(--radius-full);
+}
+
+.graph__legend-line--minor {
+    background: var(--color-severity-minor);
+}
+
+.graph__legend-line--moderate {
+    background: var(--color-severity-moderate);
+}
+
+.graph__legend-line--major {
+    background: var(--color-severity-major);
+}
+
+.graph__legend-line--contraindicated {
+    background: var(--color-severity-contraindicated);
+}
+
+@media (max-width: 640px) {
+
+    .graph__canvas {
+        height: 400px;
+    }
+
+    .graph--preview .graph__canvas {
+        height: 260px;
+    }
+
+}
+
+.graph__canvas {
+    touch-action: none;
+}
+
+.graph:not(.graph--preview) .graph__canvas {
+    cursor: grab;
+}
+
+.graph:not(.graph--preview) .graph__canvas:active {
+    cursor: grabbing;
+}
+
+.graph--preview .graph__canvas {
+    touch-action: auto;
+}

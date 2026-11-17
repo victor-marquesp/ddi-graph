@@ -11,14 +11,19 @@ class AuthController extends Controller {
 
     public function login(LoginRequest $request) {
 
-        if( Auth::attempt($request->credentials(), $request->remember()) ) {
+        if (Auth::attempt($request->credentials(), $request->remember())) {
 
             $request->session()->regenerate();
 
-            return redirect()->route('welcome')->with('success', 'User logged');
+            return redirect()
+                ->route('welcome')
+                ->with('success', 'Autenticação realizada com sucesso.');
         }
 
-        return redirect()->route('welcome')->with('error', 'Loggin Failed');
+        return redirect()
+            ->route('auth.login.form')
+            ->withInput($request->only('email', 'remember'))
+            ->with('error', 'E-mail ou senha inválidos.');
     }
 
     public function logout(Request $request) {

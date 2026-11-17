@@ -1,34 +1,94 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Novo Medicamento</x-slot:title>
+@section('title', 'Cadastrar medicamento')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('drugs.store') }}">
-        @csrf
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" id="name" name="name" class="form-control" required />
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Medicamentos',
+            'href' => route('drugs.index'),
+        ],
+        [
+            'label' => 'Cadastrar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" id="description" name="description" class="form-control" />
-        </div>
+    <x-layout.page-header
+        title="Cadastrar medicamento"
+        description="Adicione um novo medicamento à base de dados."
+        icon="pill"
+    />
 
-        <div class="mb-3">
-            <label for="classification" class="form-label"></label>
-            <select id="classification" name="classification_id" class="form-select" required>
-                @foreach ($classifications as $classification)
-                    <option value="{{ $classification->id }}">{{ $classification->name  }}</option>
-                @endforeach
-            </select>
-        </div>
-            
-        <button type="submit" class="btn btn-success">Criar</button>
+    <x-ui.card title="Dados do medicamento">
 
-    </form>
+        @if ($classifications->isEmpty())
 
-</x-layouts.app>
+            <div class="stack">
+
+                <x-ui.alert variant="warning">
+
+                    É necessário cadastrar pelo menos uma
+                    classificação terapêutica antes de
+                    cadastrar um medicamento.
+
+                </x-ui.alert>
+
+                <div class="cluster">
+
+                    <x-ui.button
+                        :href="route('classifications.create')">
+
+                        Cadastrar classificação
+
+                    </x-ui.button>
+
+                    <x-ui.button
+                        variant="secondary"
+                        :href="route('drugs.index')">
+
+                        Voltar
+
+                    </x-ui.button>
+
+                </div>
+
+            </div>
+
+        @else
+
+            <form
+                method="POST"
+                action="{{ route('drugs.store') }}"
+                class="form">
+
+                @csrf
+
+                @include('drugs._form')
+
+                <div class="form__actions">
+
+                    <x-ui.button
+                        variant="secondary"
+                        :href="route('drugs.index')">
+
+                        Cancelar
+
+                    </x-ui.button>
+
+                    <x-ui.button type="submit">
+
+                        Cadastrar medicamento
+
+                    </x-ui.button>
+
+                </div>
+
+            </form>
+
+        @endif
+
+    </x-ui.card>
+
+@endsection

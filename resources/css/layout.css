@@ -1,0 +1,137 @@
+/* ========================================
+   APPLICATION
+   ======================================== */
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app__main {
+    flex: 1;
+    padding-block: var(--space-8);
+}
+
+
+/* ========================================
+   CONTAINERS
+   ======================================== */
+
+.container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+}
+
+.container--fluid {
+    max-width: none;
+}
+
+.container--form {
+    max-width: var(--form-width);
+}
+
+.container--auth {
+    max-width: var(--auth-width);
+}
+
+
+/* ========================================
+   FLEX LAYOUT
+   ======================================== */
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.stack--sm {
+    gap: var(--space-2);
+}
+
+.stack--lg {
+    gap: var(--space-8);
+}
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.split {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+
+/* ========================================
+   GRID LAYOUT
+   ======================================== */
+
+.grid {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.grid > * {
+    min-width: 0;
+}
+
+.grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+/* ========================================
+   RESPONSIVENESS
+   ======================================== */
+
+@media (max-width: 1024px) {
+
+    .grid--4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    :root {
+        --container-padding: var(--space-4);
+    }
+
+    .app__main {
+        padding-block: var(--space-6);
+    }
+
+    .grid--3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .grid--2,
+    .grid--3,
+    .grid--4 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+}

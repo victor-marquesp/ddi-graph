@@ -1,25 +1,57 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Nova Classe</x-slot:title>
+@section('title', 'Cadastrar classificação')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('classifications.store') }}">
-        @csrf
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" id="name" name="name" class="form-control" required />
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Classificações',
+            'href' => route('classifications.index'),
+        ],
+        [
+            'label' => 'Cadastrar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" id="description" name="description" class="form-control" />
-        </div>
-            
-        <button type="submit" class="btn btn-success">Criar</button>
+    <x-layout.page-header
+        title="Cadastrar classificação"
+        description="Adicione uma nova classificação terapêutica."
+        icon="layers"
+    />
 
-    </form>
+    <x-ui.card title="Dados da classificação">
 
-</x-layouts.app>
+        <form
+            method="POST"
+            action="{{ route('classifications.store') }}"
+            class="form">
+
+            @csrf
+
+            @include('classifications._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route('classifications.index')">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Cadastrar classificação
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection

@@ -1,34 +1,62 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Editar Usuário</x-slot:title>
+@section('title', 'Editar usuário')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('users.update', $user) }}">
-        @csrf
-        @method('PUT')
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required>
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Usuários',
+            'href' => route('users.index'),
+        ],
+        [
+            'label' => $user->name,
+            'href' => route('users.show', $user),
+        ],
+        [
+            'label' => 'Editar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
-        </div>
+    <x-layout.page-header
+        title="Editar usuário"
+        description="Atualize as informações do usuário."
+        icon="pencil"
+    />
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Senha</label>
-            <input type="password" name="password" id="password" class="form-control" required>
-        </div>
+    <x-ui.card title="Dados do usuário">
 
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Confirmar senha</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-        </div>
+        <form
+            method="POST"
+            action="{{ route('users.update', $user) }}"
+            class="form">
 
-        <button type="submit" class="btn btn-primary">
-            Save
-        </button>
-    </form>
+            @csrf
+            @method('PUT')
 
-</x-layouts.app>
+            @include('users._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route('users.show', $user)">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Salvar alterações
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection

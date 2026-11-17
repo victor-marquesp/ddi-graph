@@ -15,7 +15,7 @@ class Edge {
     public private(set) Severity $severity;
 
     /** @var array<string, mixed> */
-    public private(set) ?array $properties;
+    public private(set) ?array $properties = [];
 
     /** @param array<string, mixed> $properties */
     public function __construct(int $id, Node $nodeA, Node $nodeB, Severity $severity, ?array $properties = null) {

@@ -17,7 +17,7 @@ class ClassificationController extends Controller {
     
     public function index() {
 
-        $classifications = Classification::all();
+        $classifications = Classification::orderBy('name')->get();
 
         return view('classifications.index', compact('classifications'));
     }
@@ -38,6 +38,8 @@ class ClassificationController extends Controller {
     }
 
     public function show(Classification $classification) {
+        $classification->load('drugs');
+
         return view('classifications.show', compact('classification'));
     }
 

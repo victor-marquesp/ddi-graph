@@ -1,52 +1,175 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>User Details</x-slot:title>
+@section('title', $user->name)
 
-    <x-ui.page-header title="User Details">
-        <x-slot:action>
-            <a href="{{ route('users.index') }}" class="btn btn-outline-primary">Voltar</a>
-        </x-slot:action>
-    </x-ui.page-header>
+@section('content')
 
-    <div class="container py-4">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="h4 mb-1">{{ $user->name }}</h1>
-                <small class="text-body-secondary">User #{{ $user->id }}</small>
+    @php
+        $isCurrentUser = auth()->id() === $user->id;
+    @endphp
+
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Usuários',
+            'href' => route('users.index'),
+        ],
+        [
+            'label' => $user->name,
+        ],
+    ]" />
+
+    <x-layout.page-header
+        :title="$user->name"
+        description="Informações sobre o usuário."
+        icon="users">
+
+        <x-ui.button
+            variant="secondary"
+            :href="route('users.edit', $user)">
+
+            <x-ui.icon name="pencil" size="sm" />
+
+            Editar
+
+        </x-ui.button>
+
+        <x-ui.button
+            variant="danger"
+            :disabled="$isLastUser"
+            data-modal-open="delete-user">
+
+            <x-ui.icon name="trash-2" size="sm" />
+
+            Excluir
+
+        </x-ui.button>
+
+    </x-layout.page-header>
+
+    @if ($isCurrentUser)
+
+        <x-ui.alert variant="info">
+
+            Esta é a sua conta de usuário.
+
+        </x-ui.alert>
+
+    @endif
+
+    @if ($isLastUser)
+
+        <x-ui.alert variant="warning">
+
+            Este usuário não pode ser excluído, pois o sistema
+            deve possuir pelo menos um usuário cadastrado.
+
+        </x-ui.alert>
+
+    @endif
+
+    <x-ui.card title="Informações gerais">
+
+        <x-ui.detail-list :columns="2">
+
+            <x-ui.detail-item
+                label="Nome"
+                :value="$user->name"
+            />
+
+            <x-ui.detail-item
+                label="E-mail"
+                :value="$user->email"
+            />
+
+            <x-ui.detail-item
+                label="Data de cadastro"
+                :value="$user->created_at?->format('d/m/Y')"
+            />
+
+            <x-ui.detail-item
+                label="Última atualização"
+                :value="$user->updated_at?->format('d/m/Y')"
+            />
+
+        </x-ui.detail-list>
+
+    </x-ui.card>
+
+    <div class="cluster">
+
+        <x-ui.button
+            variant="ghost"
+            :href="route('users.index')">
+
+            <x-ui.icon name="arrow-left" size="sm" />
+
+            Voltar para usuários
+
+        </x-ui.button>
+
+    </div>
+
+    @unless ($isLastUser)
+
+        <x-ui.modal id="delete-user" title="Excluir usuário">
+
+            <div class="stack">
+
+                <p>
+                    Tem certeza de que deseja excluir
+                    <strong>{{ $user->name }}</strong>?
+                </p>
+
+                @if ($isCurrentUser)
+
+                    <x-ui.alert variant="warning">
+
+                        Você está excluindo sua própria conta.
+                        Sua sessão será encerrada e você perderá
+                        o acesso administrativo ao sistema.
+
+                    </x-ui.alert>
+
+                @endif
+
+                <p class="text-muted">
+                    Essa ação não poderá ser desfeita.
+                </p>
+
             </div>
 
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-3">Name</dt>
-                    <dd class="col-sm-9">{{ $user->name }}</dd>
+            <x-slot:footer>
 
-                    <dt class="col-sm-3">Email</dt>
-                    <dd class="col-sm-9">{{ $user->email }}</dd>
+                <x-ui.button
+                    variant="secondary"
+                    data-modal-close
+                    autofocus>
 
-                    <dt class="col-sm-3">Created at</dt>
-                    <dd class="col-sm-9">{{ $user->created_at }}</dd>
+                    Cancelar
 
-                    <dt class="col-sm-3">Updated at</dt>
-                    <dd class="col-sm-9">{{ $user->updated_at }}</dd>
-                </dl>
-            </div>
+                </x-ui.button>
 
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="{{ route('users.edit', $user) }}" class="btn btn-primary">
-                    Edit
-                </a>
+                <form
+                    method="POST"
+                    action="{{ route('users.destroy', $user) }}">
 
-                <form action="{{ route('users.destroy', $user) }}" method="POST">
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('are you sure?')">
-                        Delete
-                    </button>
-                </form>
-                
-            </div>
-        </div>
-    </div>
+                    <x-ui.button
+                        variant="danger"
+                        type="submit">
 
-</x-layouts.app>
+                        Confirmar exclusão
+
+                    </x-ui.button>
+
+                </form>
+
+            </x-slot:footer>
+
+        </x-ui.modal>
+
+    @endunless
+
+@endsection

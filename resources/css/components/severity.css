@@ -1,0 +1,24 @@
+.badge--severity-minor {
+    color: var(--color-severity-minor-text);
+    background: var(--color-severity-minor-surface);
+}
+
+.badge--severity-moderate {
+    color: var(--color-severity-moderate-text);
+    background: var(--color-severity-moderate-surface);
+}
+
+.badge--severity-major {
+    color: var(--color-severity-major-text);
+    background: var(--color-severity-major-surface);
+}
+
+.badge--severity-contraindicated {
+    color: var(--color-severity-contraindicated-text);
+    background: var(--color-severity-contraindicated-surface);
+}
+
+.badge--severity-unknown {
+    color: var(--color-text-secondary);
+    background: var(--color-muted);
+}

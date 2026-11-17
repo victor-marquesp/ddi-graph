@@ -1,38 +1,79 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Editar Interação</x-slot:title>
+@section('title', 'Editar interação')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('interactions.update', [$interaction->drugA_id, $interaction->drugB_id]) }}">
-        @csrf
-        @method('PUT')
+@section('content')
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" 
-                id="description" 
-                name="description" 
-                class="form-control" 
-                value="{{ $interaction->description }}"/>
-        </div>
+    @php
+        $params = [
+            'drugA' => $interaction->drugA_id,
+            'drugB' => $interaction->drugB_id,
+        ];
 
-        <div class="mb-3">
-            <label for="severity" class="form-label"></label>
-            <select id="severity" name="severity" class="form-select">
-                @foreach (App\Enums\Severity::cases() as $severity)
-                    <option 
-                    value="{{ $severity }}"
-                    @selected($severity === $interaction->severity)>
-                        {{ $severity }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-            
-        <button type="submit" class="btn btn-warning">Salvar</button>
+        $interactionName = $interaction->drugA->name
+            . ' e '
+            . $interaction->drugB->name;
+    @endphp
 
-    </form>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Interações',
+            'href' => route('interactions.index'),
+        ],
+        [
+            'label' => $interactionName,
+            'href' => route('interactions.show', $params),
+        ],
+        [
+            'label' => 'Editar',
+        ],
+    ]" />
 
-</x-layouts.app>
+    <x-layout.page-header
+        title="Editar interação"
+        description="Atualize as informações da interação medicamentosa."
+        icon="pencil"
+    />
+
+    <x-ui.card title="Dados da interação">
+
+        <form
+            method="POST"
+            action="{{ route(
+                'interactions.update',
+                $params
+            ) }}"
+            class="form">
+
+            @csrf
+            @method('PUT')
+
+            @include('interactions._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route(
+                        'interactions.show',
+                        $params
+                    )">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Salvar alterações
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection

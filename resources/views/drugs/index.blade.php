@@ -1,37 +1,134 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Medicamentos</x-slot:title>
+@section('title', 'Medicamentos')
 
-    <x-ui.page-header title="Medicamentos">
-        <x-slot:action>
-            <a href="{{ route('drugs.create') }}" class="btn btn-success">Novo Medicamento</a>
-        </x-slot:action>
-    </x-ui.page-header>
+@section('content')
 
-    <table class="table">
+    <x-layout.breadcrumb :items="[
+        ['label' => 'Medicamentos'],
+    ]" />
 
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Ações</th> 
-            </tr>
-        </thead>
-        
-        <tbody>
-            @foreach ($drugs as $drug)
+    <x-layout.page-header
+        title="Medicamentos"
+        description="Consulte os medicamentos cadastrados no sistema."
+        icon="pill">
 
-                <tr>
-                    <th scope="row">{{ $drug->id }}</th>
-                    <td>{{ $drug->name }}</td>
-                    <td>
-                        <a href="{{ route('drugs.show', $drug->id) }}" class="btn btn-info">Detalhes</a>
-                    </td>
-                </tr>
-                
-            @endforeach
-        </tbody>
+        @auth
 
-    </table>
+            <x-ui.button :href="route('drugs.create')">
 
-</x-layouts.app>
+                <x-ui.icon name="plus" size="sm" />
+
+                Novo medicamento
+
+            </x-ui.button>
+
+        @endauth
+
+    </x-layout.page-header>
+
+    <x-domain.educational-notice />
+
+    <x-ui.card
+        title="Medicamentos cadastrados"
+        :description="$drugs->count() . ' medicamento(s) encontrado(s).'"
+        :flush="true">
+
+        @if ($drugs->isEmpty())
+
+            <x-ui.empty-state
+                title="Nenhum medicamento cadastrado"
+                description="Ainda não existem medicamentos na base de dados."
+                icon="pill">
+
+                @auth
+
+                    <x-ui.button :href="route('drugs.create')">
+                        Cadastrar medicamento
+                    </x-ui.button>
+
+                @endauth
+
+            </x-ui.empty-state>
+
+        @else
+
+            <x-ui.table>
+
+                <x-slot:head>
+
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Classificação</th>
+                        <th scope="col" class="text-right">Ações</th>
+                    </tr>
+
+                </x-slot:head>
+
+                @foreach ($drugs as $drug)
+
+                    <tr>
+
+                        <td class="font-medium">
+                            {{ $drug->name }}
+                        </td>
+
+                        <td>
+
+                            <a href="{{ route(
+                                'classifications.show',
+                                $drug->classification_id
+                            ) }}">
+                                {{ $drug->classification->name }}
+                            </a>
+
+                        </td>
+
+                        <td>
+
+                            <div class="table__actions">
+
+                                <x-ui.button
+                                    variant="ghost"
+                                    size="sm"
+                                    :href="route('drugs.show', $drug)"
+                                    title="Visualizar medicamento"
+                                    aria-label="Visualizar medicamento">
+
+                                    <x-ui.icon name="eye" size="sm" />
+
+                                </x-ui.button>
+
+                                @auth
+
+                                    <x-ui.button
+                                        variant="ghost"
+                                        size="sm"
+                                        :href="route('drugs.edit', $drug)"
+                                        title="Editar medicamento"
+                                        aria-label="Editar medicamento">
+
+                                        <x-ui.icon
+                                            name="pencil"
+                                            size="sm"
+                                        />
+
+                                    </x-ui.button>
+
+                                @endauth
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @endforeach
+
+            </x-ui.table>
+
+        @endif
+
+    </x-ui.card>
+
+@endsection

@@ -44,7 +44,10 @@ class UserController extends Controller {
     }
 
     public function show(User $user) {
-        return view('users.show', compact('user'));
+
+        $isLastUser = User::count() < 2;
+
+        return view('users.show', compact('user', 'isLastUser'));
     }
 
     public function edit(User $user) {
@@ -65,24 +68,34 @@ class UserController extends Controller {
         return redirect()->route('users.show', $user)->with('success', 'User Updated');
     }
 
-    public function destroy(Request $request, User $user) {        
+    public function destroy(Request $request, User $user) {
+
+        $isCurrentUser = auth()->id() === $user->id;
 
         try {
 
             $this->userService->delete(user: $user);
-            
+
         } catch (NotEnoughUsersException $e) {
-            return redirect()->route('users.index')->with('error', 'Cannot delete last user');
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'Não é possível excluir o último usuário.');
         }
 
-        if(auth()->id() === $user->id) {
-            
+        if ($isCurrentUser) {
             Auth::logout();
+
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('welcome')
+                ->with('success', 'Sua conta foi excluída.');
         }
 
-        return redirect()->route('users.index')->with('user', 'User deleted');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário excluído com sucesso.');
 
     }
 }

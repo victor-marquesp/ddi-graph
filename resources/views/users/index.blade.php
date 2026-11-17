@@ -1,39 +1,120 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Users</x-slot:title>
+@section('title', 'Usuários')
 
-    <x-ui.page-header title="Users">
-        <x-slot:action>
-            <a href="{{ route('users.create') }}" class="btn btn-primary">New User</a>
-        </x-slot:action>
-    </x-ui.page-header>
+@section('content')
 
-    <table class="table">
+    <x-layout.breadcrumb :items="[
+        ['label' => 'Usuários'],
+    ]" />
 
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Email</th> 
-                <th scope="col">Ações</th> 
-            </tr>
-        </thead>
-        
-        <tbody>
-            @foreach ($users as $user)
+    <x-layout.page-header
+        title="Usuários"
+        description="Gerencie os usuários com acesso administrativo."
+        icon="users">
 
-                <tr>
-                    <th scope="row">{{ $user->id }}</th>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>
-                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-info">Detalhes</a>
-                    </td>
-                </tr>
-                
-            @endforeach
-        </tbody>
+        <x-ui.button :href="route('users.create')">
 
-    </table>
+            <x-ui.icon name="plus" size="sm" />
 
-</x-layouts.app>
+            Novo usuário
+
+        </x-ui.button>
+
+    </x-layout.page-header>
+
+    <x-ui.card
+        title="Usuários cadastrados"
+        :description="$users->count() . ' usuário(s) encontrado(s).'"
+        :flush="true">
+
+        @if ($users->isEmpty())
+
+            <x-ui.empty-state
+                title="Nenhum usuário cadastrado"
+                icon="users"
+            />
+
+        @else
+
+            <x-ui.table>
+
+                <x-slot:head>
+
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col" class="text-right">Ações</th>
+                    </tr>
+
+                </x-slot:head>
+
+                @foreach ($users as $user)
+
+                    <tr>
+
+                        <td>
+
+                            <div class="cluster">
+
+                                <span class="font-medium">
+                                    {{ $user->name }}
+                                </span>
+
+                                @if (auth()->id() === $user->id)
+
+                                    <x-ui.badge variant="primary">
+                                        Você
+                                    </x-ui.badge>
+
+                                @endif
+
+                            </div>
+
+                        </td>
+
+                        <td class="text-muted">
+                            {{ $user->email }}
+                        </td>
+
+                        <td>
+
+                            <div class="table__actions">
+
+                                <x-ui.button
+                                    variant="ghost"
+                                    size="sm"
+                                    :href="route('users.show', $user)"
+                                    title="Visualizar usuário"
+                                    aria-label="Visualizar usuário">
+
+                                    <x-ui.icon name="eye" size="sm" />
+
+                                </x-ui.button>
+
+                                <x-ui.button
+                                    variant="ghost"
+                                    size="sm"
+                                    :href="route('users.edit', $user)"
+                                    title="Editar usuário"
+                                    aria-label="Editar usuário">
+
+                                    <x-ui.icon name="pencil" size="sm" />
+
+                                </x-ui.button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @endforeach
+
+            </x-ui.table>
+
+        @endif
+
+    </x-ui.card>
+
+@endsection

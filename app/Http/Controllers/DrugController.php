@@ -16,7 +16,8 @@ class DrugController extends Controller{
     ) {}
 
     public function index() {
-        $drugs = Drug::all();
+
+        $drugs = Drug::with('classification')->orderBy('name')->get();
 
         return view('drugs.index', compact('drugs'));
     }

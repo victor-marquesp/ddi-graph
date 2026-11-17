@@ -1,22 +1,36 @@
-@props(['type', 'dismissible' => true])
+@props([
+    'variant' => 'info',
+    'title' => null,
+])
 
 @php
-    $icon = match ($type) {
-        'success' => 'bi-check-circle-fill',
-        'danger' => 'bi-exclamation-triangle-fill',
-        'warning' => 'bi-exclamation-circle-fill',
-        default => 'bi-info-circle-fill',
+    $icon = match ($variant) {
+        'success' => 'check-circle',
+        'danger' => 'circle-alert',
+        'warning' => 'triangle-alert',
+        default => 'info',
     };
 @endphp
 
 <div
-    class="alert alert-{{ $type }} d-flex align-items-center gap-2 {{ $dismissible ? 'alert-dismissible fade show' : '' }}"
-    role="alert"
->
-    <i class="bi {{ $icon }}" aria-hidden="true"></i>
-    <div class="flex-grow-1">{{ $slot }}</div>
+    role="{{ $variant === 'danger' ? 'alert' : 'status' }}"
+    {{ $attributes->class([
+        'alert',
+        'alert--' . $variant,
+    ]) }}>
 
-    @if ($dismissible)
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-    @endif
+    <x-ui.icon :name="$icon" />
+
+    <div class="alert__content">
+
+        @if ($title)
+            <strong class="alert__title">
+                {{ $title }}
+            </strong>
+        @endif
+
+        {{ $slot }}
+
+    </div>
+
 </div>

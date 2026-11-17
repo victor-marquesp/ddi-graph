@@ -42,14 +42,21 @@ class InteractionService {
 
     public function update(InteractionUpdateDTO $dto, Interaction $interaction) : Interaction {
 
-        $interaction->update([
+        $query = Interaction::where(
+            'drugA_id',
+            $interaction->drugA_id
+        )->where(
+            'drugB_id',
+            $interaction->drugB_id
+        );
+
+        $query->update([
             'severity' => $dto->severity,
-            'description' => $dto->description
+            'description' => $dto->description,
         ]);
 
-        $interaction->refresh();
+        return $query->firstOrFail();
 
-        return $interaction;
     }
 
     public function delete(Interaction $interaction) {

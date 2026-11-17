@@ -1,55 +1,192 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Drug Details</x-slot:title>
+@section('title', $drug->name)
 
-    <x-ui.page-header title="Drug Details">
-        <x-slot:action>
-            <a href="{{ route('drugs.index') }}" class="btn btn-outline-primary">Voltar</a>
-        </x-slot:action>
-    </x-ui.page-header>
+@section('content')
 
-    <div class="container py-4">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="h4 mb-1">{{ $drug->name }}</h1>
-                <small class="text-body-secondary">drug #{{ $drug->id }}</small>
-            </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Medicamentos',
+            'href' => route('drugs.index'),
+        ],
+        [
+            'label' => $drug->name,
+        ],
+    ]" />
 
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-3">Name</dt>
-                    <dd class="col-sm-9">{{ $drug->name }}</dd>
+    <x-layout.page-header
+        :title="$drug->name"
+        description="Informações sobre o medicamento."
+        icon="pill">
 
-                    <dt class="col-sm-3">Classificação</dt>
-                    <dd class="col-sm-9">{{ $drug->classification->name }}</dd>
+        @auth
 
-                    <dt class="col-sm-3">Descrição</dt>
-                    <dd class="col-sm-9">{{ $drug->description ?? 'sem desc' }}</dd>
+            <x-ui.button
+                variant="secondary"
+                :href="route('drugs.edit', $drug)">
 
-                    <dt class="col-sm-3">Created at</dt>
-                    <dd class="col-sm-9">{{ $drug->created_at }}</dd>
+                <x-ui.icon name="pencil" size="sm" />
 
-                    <dt class="col-sm-3">Updated at</dt>
-                    <dd class="col-sm-9">{{ $drug->updated_at }}</dd>
-                </dl>
-            </div>
+                Editar
 
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="{{ route('drugs.edit', $drug) }}" class="btn btn-warning">
-                    Edit
+            </x-ui.button>
+
+            <x-ui.button
+                variant="danger"
+                data-modal-open="delete-drug">
+
+                <x-ui.icon name="trash-2" size="sm" />
+
+                Excluir
+
+            </x-ui.button>
+
+        @endauth
+
+    </x-layout.page-header>
+
+    <x-domain.educational-notice />
+
+    <x-ui.card title="Informações gerais">
+
+        <x-ui.detail-list :columns="2">
+
+            <x-ui.detail-item
+                label="Nome"
+                :value="$drug->name"
+            />
+
+            <x-ui.detail-item label="Classificação terapêutica">
+
+                <a href="{{ route(
+                    'classifications.show',
+                    $drug->classification_id
+                ) }}">
+                    {{ $drug->classification->name }}
                 </a>
 
-                <form action="{{ route('drugs.destroy', $drug) }}" method="POST">
+            </x-ui.detail-item>
+
+            <x-ui.detail-item
+                label="Descrição"
+                :value="$drug->description"
+                :full="true"
+            />
+
+            <x-ui.detail-item
+                label="Data de cadastro"
+                :value="$drug->created_at?->format('d/m/Y')"
+            />
+
+            <x-ui.detail-item
+                label="Última atualização"
+                :value="$drug->updated_at?->format('d/m/Y')"
+            />
+
+        </x-ui.detail-list>
+
+    </x-ui.card>
+
+    <x-ui.card title="Análise de interações">
+
+        <div class="stack">
+
+            <p class="text-muted">
+                Selecione medicamentos para analisar suas
+                interações por meio das ferramentas
+                disponíveis no sistema.
+            </p>
+
+            <div class="cluster">
+
+                <x-ui.button :href="route('selection', [
+                    'drug_ids' => [$drug->id],
+                ])">
+
+                    <x-ui.icon name="network" size="sm" />
+
+                    Iniciar análise
+
+                </x-ui.button>
+
+            </div>
+
+        </div>
+
+    </x-ui.card>
+
+    <div class="cluster">
+
+        <x-ui.button
+            variant="ghost"
+            :href="route('drugs.index')">
+
+            <x-ui.icon name="arrow-left" size="sm" />
+
+            Voltar para medicamentos
+
+        </x-ui.button>
+
+    </div>
+
+    @auth
+
+        <x-ui.modal
+            id="delete-drug"
+            title="Excluir medicamento">
+
+            <div class="stack">
+
+                <p>
+                    Tem certeza de que deseja excluir
+                    <strong>{{ $drug->name }}</strong>?
+                </p>
+
+                <x-ui.alert variant="warning">
+
+                    Todas as interações associadas a este
+                    medicamento também serão excluídas.
+
+                </x-ui.alert>
+
+                <p class="text-muted">
+                    Essa ação não poderá ser desfeita.
+                </p>
+
+            </div>
+
+            <x-slot:footer>
+
+                <x-ui.button
+                    variant="secondary"
+                    data-modal-close
+                    autofocus>
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <form
+                    method="POST"
+                    action="{{ route('drugs.destroy', $drug) }}">
+
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('are you sure?')">
-                        Delete
-                    </button>
-                </form>
-                
-            </div>
-        </div>
-    </div>
+                    <x-ui.button
+                        variant="danger"
+                        type="submit">
 
-</x-layouts.app>
+                        Confirmar exclusão
+
+                    </x-ui.button>
+
+                </form>
+
+            </x-slot:footer>
+
+        </x-ui.modal>
+
+    @endauth
+
+@endsection

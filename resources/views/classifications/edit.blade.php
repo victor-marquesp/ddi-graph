@@ -1,31 +1,71 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Nova Classe</x-slot:title>
+@section('title', 'Editar classificação')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('classifications.update', $classification) }}">
-        @csrf
-        @method('PUT')
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" id="name" name="name" class="form-control" value="{{ $classification->name }}" required />
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Classificações',
+            'href' => route('classifications.index'),
+        ],
+        [
+            'label' => $classification->name,
+            'href' => route(
+                'classifications.show',
+                $classification
+            ),
+        ],
+        [
+            'label' => 'Editar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" 
-                    id="description" 
-                    name="description" 
-                    class="form-control" 
-                    value="{{ $classification->description }}" 
-                />
-        </div>
-    
-        <button type="submit" class="btn btn-warning">Salvar</button>
+    <x-layout.page-header
+        title="Editar classificação"
+        description="Atualize as informações da classificação terapêutica."
+        icon="pencil"
+    />
 
-    </form>
+    <x-ui.card title="Dados da classificação">
 
-</x-layouts.app>
+        <form
+            method="POST"
+            action="{{ route(
+                'classifications.update',
+                $classification
+            ) }}"
+            class="form">
+
+            @csrf
+            @method('PUT')
+
+            @include('classifications._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route(
+                        'classifications.show',
+                        $classification
+                    )">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Salvar alterações
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection

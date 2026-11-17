@@ -1,29 +1,113 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>login</x-slot:title>
+@section('title', 'Entrar')
+@section('container-class', 'container--auth')
+@section('hide-navbar', 'true')
+@section('hide-footer', 'true')
 
-    <div class="container">
-        <form method="POST" action="{{ route('auth.login') }}">
-            @csrf
+@section('content')
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" placeholder="email@provider.com" class="form-control" />
+    <div class="auth">
+
+        <div class="auth__brand">
+
+            <div class="auth__icon">
+                <x-ui.icon name="network" size="xl" />
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Senha</label>
-                <input type="password" name="password" id="password" class="form-control" />
-            </div>
+            <h1 class="auth__title">
+                {{ config('app.name') }}
+            </h1>
 
-            <div class="mb-3 form-check">
-                <input type="checkbox" name="remember" id="exampleCheck1" class="form-check-input" >
-                <label class="form-check-label" for="exampleCheck1">Manter conectado</label>
-            </div>
+            <p class="auth__description">
+                Área administrativa
+            </p>
 
-            <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
 
-        </form>
+        <x-ui.card
+            title="Entrar"
+            description="Informe suas credenciais para acessar o sistema.">
+
+            <form
+                method="POST"
+                action="{{ route('auth.login') }}"
+                class="form">
+
+                @csrf
+
+                <x-form.input
+                    name="email"
+                    label="E-mail"
+                    type="email"
+                    placeholder="usuario@example.com"
+                    autocomplete="username"
+                    :required="true"
+                    autofocus
+                />
+
+                <x-form.input
+                    name="password"
+                    label="Senha"
+                    type="password"
+                    placeholder="Informe sua senha"
+                    autocomplete="current-password"
+                    :required="true"
+                />
+
+                <div class="stack stack--sm">
+
+                    <label class="auth__checkbox">
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            value="1"
+                            @checked(old('remember'))
+                        >
+
+                        Lembrar-me
+
+                    </label>
+
+                    @error('remember')
+
+                        <p class="field__error">
+                            {{ $message }}
+                        </p>
+
+                    @enderror
+
+                </div>
+
+                <x-ui.button type="submit" :block="true">
+
+                    <x-ui.icon name="log-in" size="sm" />
+
+                    Entrar
+
+                </x-ui.button>
+
+            </form>
+
+        </x-ui.card>
+
+        <div class="auth__footer">
+
+            <a href="{{ route('welcome') }}">
+
+                <x-ui.icon name="arrow-left" size="sm" />
+
+                Voltar para o início
+
+            </a>
+
+        </div>
+
+        <p class="text-muted text-xs text-center">
+            Acesso restrito a usuários autorizados.
+        </p>
+
     </div>
 
-</x-layouts.app>
+@endsection

@@ -6,6 +6,7 @@ use App\DTOs\InteractionDTO;
 use App\DTOs\InteractionUpdateDTO;
 use App\Exceptions\DuplicatedInteractionException;
 use App\Exceptions\SelfInteractionException;
+use App\Http\Requests\Interaction\IndexInteractionRequest;
 use App\Http\Requests\Interaction\StoreInteractionRequest;
 use App\Http\Requests\Interaction\UpdateInteractionRequest;
 use App\Models\Drug;
@@ -18,10 +19,24 @@ class InteractionController extends Controller {
         private InteractionService $interactionService
     ) {}
     
-    public function index() {
-        $interactions = Interaction::all();
+    public function index(IndexInteractionRequest $request) {
 
-        return view('interactions.index', compact('interactions'));
+        $ids = $request->validated('drug_ids');
+
+        $query = Interaction::with(['drugA', 'drugB']);
+
+        if ($ids !== null) {
+            $query->whereIn('drugA_id', $ids)
+                ->whereIn('drugB_id', $ids);
+        }
+
+        $interactions = $query->get();
+
+        return view('interactions.index', compact(
+            'interactions',
+            'ids'
+        ));
+
     }
 
     public function create() {
@@ -39,8 +54,10 @@ class InteractionController extends Controller {
         try {
             $this->interactionService->create($dto);
         } catch (SelfInteractionException | DuplicatedInteractionException $e) {
-            return redirect()->route('interactions.index')->with('error', $e->getMessage());
-        } 
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()->route('interactions.index')->with('success', 'Interaction created');
     }

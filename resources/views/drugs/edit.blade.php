@@ -1,39 +1,62 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Editar Medicamento</x-slot:title>
+@section('title', 'Editar medicamento')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('drugs.update', $drug) }}">
-        @csrf
-        @method('PUT')
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" id="name" name="name" class="form-control" value="{{ $drug->name }}" required />
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Medicamentos',
+            'href' => route('drugs.index'),
+        ],
+        [
+            'label' => $drug->name,
+            'href' => route('drugs.show', $drug),
+        ],
+        [
+            'label' => 'Editar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="description" class="form-label">
-                Descrição
-                <span class="text-muted small">(opcional)</span>
-            </label>
-            <input type="text" id="description" name="description" class="form-control" value="{{ $drug->description }}"/>
-        </div>
+    <x-layout.page-header
+        title="Editar medicamento"
+        :description="'Atualize as informações de ' . $drug->name . '.'"
+        icon="pencil"
+    />
 
-        <div class="mb-3">
-            <label for="classification" class="form-label"></label>
-            <select id="classification" name="classification_id" class="form-select">
-                @foreach ($classifications as $classification)
-                    <option 
-                    value="{{ $classification->id }}"
-                    @selected($drug->classification->name === $classification->name)>
-                        {{ $classification->name  }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-            
-        <button type="submit" class="btn btn-warning">Salvar</button>
+    <x-ui.card title="Dados do medicamento">
 
-    </form>
+        <form
+            method="POST"
+            action="{{ route('drugs.update', $drug) }}"
+            class="form">
 
-</x-layouts.app>
+            @csrf
+            @method('PUT')
+
+            @include('drugs._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route('drugs.show', $drug)">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Salvar alterações
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection

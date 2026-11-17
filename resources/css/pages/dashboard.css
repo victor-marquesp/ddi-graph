@@ -1,0 +1,36 @@
+.metrics-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.metrics-section__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.metrics-section__description {
+    color: var(--color-text-secondary);
+}
+
+.metric-progress {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    background: var(--color-muted);
+    border-radius: var(--radius-full);
+}
+
+.metric-progress__fill {
+    height: 100%;
+
+    background: var(--color-primary);
+    border-radius: inherit;
+}
+
+.metric-progress__fill--danger {
+    background: var(--color-danger);
+}

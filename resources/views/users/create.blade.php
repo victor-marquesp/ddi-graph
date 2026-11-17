@@ -1,33 +1,57 @@
-<x-layouts.app>
+@extends('layouts.app')
 
-    <x-slot:title>Novo Usuário</x-slot:title>
+@section('title', 'Cadastrar usuário')
+@section('container-class', 'container--form')
 
-    <form method="POST" action="{{ route('users.store') }}">
-        @csrf
+@section('content')
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" name="name" id="name" class="form-control" required>
-        </div>
+    <x-layout.breadcrumb :items="[
+        [
+            'label' => 'Usuários',
+            'href' => route('users.index'),
+        ],
+        [
+            'label' => 'Cadastrar',
+        ],
+    ]" />
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" required>
-        </div>
+    <x-layout.page-header
+        title="Cadastrar usuário"
+        description="Adicione um usuário com acesso administrativo."
+        icon="users"
+    />
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Senha</label>
-            <input type="password" name="password" id="password" class="form-control" required>
-        </div>
+    <x-ui.card title="Dados do usuário">
 
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Confirmar senha</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-        </div>
+        <form
+            method="POST"
+            action="{{ route('users.store') }}"
+            class="form">
 
-        <button type="submit" class="btn btn-primary">
-            Create
-        </button>
-    </form>
+            @csrf
 
-</x-layouts.app>
+            @include('users._form')
+
+            <div class="form__actions">
+
+                <x-ui.button
+                    variant="secondary"
+                    :href="route('users.index')">
+
+                    Cancelar
+
+                </x-ui.button>
+
+                <x-ui.button type="submit">
+
+                    Cadastrar usuário
+
+                </x-ui.button>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+@endsection
