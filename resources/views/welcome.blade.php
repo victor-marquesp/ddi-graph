@@ -4,6 +4,8 @@
 
 @section('content')
 
+    <x-domain.disclaimer />
+
     <section class="hero">
 
         <div class="hero__content">
