@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\DrugController;
 use App\Http\Controllers\GraphController;
+use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,12 @@ Route::controller(InteractionController::class)->group(function () {
 
 Route::get('/graph/all', [GraphController::class, 'all'])->name('graph.all');
 Route::get('/graph/selected', [GraphController::class, 'selected'])->name('graph.selected');
+
+
+// --- Metrics ---
+
+Route::get('/metrics/all', [MetricsController::class, 'all'])->name('metrics.all');
+Route::get('/metrics/selected', [MetricsController::class, 'selected'])->name('metrics.selected');
 
 // --- Admin --- 
 

@@ -209,7 +209,7 @@ describe('default cases', function() {
 
         $this->assertEquals(
             [
-                'value' => 4,
+                'degree' => 4,
                 'nodeIds' => [2] 
             ], 
             $result->maximumDegree
@@ -256,7 +256,7 @@ describe('specific cases', function () {
         $this->assertSame(0, $result->connectedComponents);
 
         $this->assertSame([
-            'value' => null,
+            'degree' => null,
             'nodeIds' => []
         ], $result->maximumDegree);
 
@@ -310,7 +310,7 @@ describe('specific cases', function () {
         $this->assertSame(0.0, $result->averageDegree);
         $this->assertSame(0.0, $result->density);
 
-        $this->assertSame(0, $result->maximumDegree['value']);
+        $this->assertSame(0, $result->maximumDegree['degree']);
 
         $this->assertEqualsCanonicalizing(
             [1, 2, 3],
@@ -336,7 +336,7 @@ describe('specific cases', function () {
         $this->assertSame(0.0, $result->density);
 
         $this->assertSame([
-            'value' => 0,
+            'degree' => 0,
             'nodeIds' => [1]
         ], $result->maximumDegree);
 
@@ -355,7 +355,7 @@ describe('specific cases', function () {
 
         $result = (new GraphMetrics())->calculate($graph);
 
-        $this->assertSame(2, $result->maximumDegree['value']);
+        $this->assertSame(2, $result->maximumDegree['degree']);
 
         $this->assertEqualsCanonicalizing(
             [2, 3],
@@ -406,7 +406,7 @@ describe('specific cases', function () {
 
         $this->assertSame(1, $result->connectedComponents);
 
-        $this->assertSame(3, $result->maximumDegree['value']);
+        $this->assertSame(3, $result->maximumDegree['degree']);
 
         $this->assertEqualsCanonicalizing(
             [1, 2, 3, 4],

@@ -6,7 +6,6 @@ use App\Graph\GraphBuilder;
 use App\Http\Requests\Graph\SelectedGraphRequest;
 use App\Models\Drug;
 use App\Models\Interaction;
-use Illuminate\Http\Request;
 
 class GraphController extends Controller {
     

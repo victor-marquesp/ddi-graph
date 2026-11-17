@@ -19,5 +19,9 @@ enum Severity : string {
         };
         
     }
+
+    public function isSevere() : bool {
+        return $this->weight() >= 3;
+    }
     
 }
