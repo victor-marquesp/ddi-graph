@@ -1,0 +1,55 @@
+{
+    "dataset": {
+        "drugs": 200,
+        "interactions": 1777
+    },
+    "integrity": {
+        "expected_nodes": 200,
+        "actual_nodes": 200,
+        "valid_nodes": 200,
+        "expected_edges": 1777,
+        "actual_edges": 1777,
+        "valid_edges": 1777,
+        "passed": true
+    },
+    "performance": {
+        "retrieval_ms": 24.332378,
+        "build_ms": 12.615274,
+        "metrics_ms": 1.010688,
+        "graph_memory_mb": 1.179779052734375,
+        "peak_build_memory_mb": 1.1801986694335938,
+        "total_peak_memory_mib": 11.214363098144531
+    },
+    "comparison": {
+        "has_edge": {
+            "equivalent": true,
+            "sql_ms": 0.160981747,
+            "graph_ms": 0.00013442
+        },
+        "neighbors": {
+            "equivalent": true,
+            "sql_ms": 2.124904063,
+            "graph_ms": 0.000643997
+        },
+        "degree": {
+            "equivalent": true,
+            "sql_ms": 2.3809176539999997,
+            "graph_ms": 8.5557e-5
+        }
+    },
+    "metrics": {
+        "nodeCount": 200,
+        "edgeCount": 1777,
+        "averageDegree": 17.77,
+        "density": 0.0892964824120603,
+        "connectedComponents": 26,
+        "maximumDegree": {
+            "degree": 85,
+            "nodeIds": [
+                145
+            ]
+        },
+        "averageEdgeSeverity": 2.2228474957794035,
+        "severeInteractions": 456
+    }
+}
