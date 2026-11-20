@@ -19,7 +19,7 @@ A abordagem permite explorar visualmente os relacionamentos e executar algoritmo
 
 > **Aviso:** este sistema possui finalidade acadêmica, educacional e computacional. Os dados não foram validados clinicamente pelos autores. A ausência de uma interação no sistema não significa que ela não exista. O sistema não deve ser utilizado para decisões clínicas, prescrição ou orientação sobre medicamentos.
 
-**Artigo disponível em** `docs/artigo.pdf` 
+**Artigo disponível em** [docs/artigo.pdf](docs/artigo.pdf) 
 
 ## Tecnologias
 
@@ -126,6 +126,12 @@ Obtenha os seguintes arquivos em suas respectivas fontes:
 | [DDInter](https://ddinter.scbdd.com/download/) | `ddinter_downloads_code_*.csv` |
 | [mnarayan1/DDInter](https://github.com/mnarayan1/DDInter) | `drug_data.json` |
 | [ATC-drugs-class.db](https://github.com/theoffbeatdoc/ATC-drugs-class.db) | `drugs_atc.json` e `drugs_list.json` |
+
+Crie o diretório destinado ao armazenamento dos arquivos originais:
+
+```bash
+mkdir -p database/datasets/raw
+```
 
 Disponha os arquivos no diretório `database/datasets/raw/`, observando as condições de licenciamento de suas respectivas fontes.
 
@@ -338,6 +344,10 @@ O código-fonte autoral do DDI-Graph é disponibilizado sob a licença [MIT](LIC
 O projeto foi desenvolvido como Trabalho de Conclusão de Curso do curso Técnico em Informática do Instituto Federal do Paraná (IFPR) - Campus Paranaguá.
 
 ### Dados experimentais
+
+### Dependências
+
+As bibliotecas, frameworks e demais componentes de terceiros permanecem sujeitos às suas respectivas licenças, conforme documentado em [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 As bases de dados utilizadas nos experimentos possuem condições próprias de licenciamento:
 

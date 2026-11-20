@@ -11,7 +11,19 @@ Este documento registra as fontes de dados, os procedimentos de processamento, o
 | ATC-drugs-class.db | `drugs_list.json` | 11/07/2026 | d98d6b0651cde2e812e480695a265c3f766da9a5 |
 | ATC-drugs-class.db | `drugs_atc.json` | 11/07/2026 | 7e7238c1eb20e6d957c0a85afe56206417125a32 |
 
+### Verificação de integridade
+
 Os hashes SHA-256 dos arquivos originais e processados estão registrados em [`SHA256SUMS`](SHA256SUMS).
+
+Os hashes SHA-256 permitem verificar a correspondência entre os arquivos utilizados em uma reprodução experimental e aqueles utilizados originalmente na pesquisa.
+
+Após a obtenção dos arquivos originais e a geração do conjunto de dados processado completo, execute, a partir da raiz do repositório:
+
+```bash
+sha256sum -c docs/SHA256SUMS
+```
+
+A correspondência entre os hashes indica que os arquivos possuem conteúdo idêntico ao registrado durante a pesquisa. Eventuais divergências podem indicar diferenças nas versões das fontes, no processamento ou na codificação dos arquivos.
 
 ## 2. Processamento dos dados
 
@@ -103,3 +115,7 @@ As medições incluem:
 - Métricas estruturais da rede.
 
 Diferentes configurações de hardware e software podem produzir variações nas medições de desempenho, ainda que sejam utilizados os mesmos dados e parâmetros experimentais.
+
+Os resultados experimentais autorais disponibilizados neste repositório estão licenciados sob a [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+Essa licença não se estende às bases de dados de terceiros utilizadas na pesquisa.
