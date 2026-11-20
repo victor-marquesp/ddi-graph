@@ -117,18 +117,38 @@ php artisan db:seed
 
 **Opção B — Dataset experimental:**
 
+Por questões de licenciamento, os conjuntos de dados originais e processados não são distribuídos neste repositório. Entretanto, são disponibilizados os scripts necessários para sua preparação e importação, possibilitando a reprodução dos experimentos.
+
+Obtenha os seguintes arquivos em suas respectivas fontes:
+
+| Fonte | Arquivos |
+| --- | --- |
+| [DDInter](https://ddinter.scbdd.com/download/) | `ddinter_downloads_code_*.csv` |
+| [mnarayan1/DDInter](https://github.com/mnarayan1/DDInter) | `drug_data.json` |
+| [ATC-drugs-class.db](https://github.com/theoffbeatdoc/ATC-drugs-class.db) | `drugs_atc.json` e `drugs_list.json` |
+
+Disponha os arquivos no diretório `database/datasets/raw/`, observando as condições de licenciamento de suas respectivas fontes.
+
+**Mais dados sobre as datas, versões e integridade dos arquivos utilizados originalmente no projeto estão listadas em [REPRODUCIBILITY](docs/REPRODUCIBILITY.md)**
+
+Para gerar o dataset completo, execute:
+
 ```bash
-php artisan dataset:import
+python3 scripts/extract.py
 ```
 
-> Caso deseje recriar os arquivos processados a partir dos dados brutos, execute o script de extração antes da importação:
+Alternativamente, para gerar uma amostra de 200 medicamentos:
 
 ```bash
-# Dataset completo
-python3 scripts/extract.py
-
-# Ou uma amostra de demonstração (sobrescreve os CSVs processados)
 python3 scripts/extract.py --limit 200
+```
+
+Os arquivos resultantes serão armazenados em `database/datasets/processed/`.
+
+Para importá-los ao banco de dados, execute:
+
+```bash
+php artisan dataset:import
 ```
 
 O comando `dataset:import` exige que as tabelas de classificações, medicamentos e interações estejam vazias. Para utilizar as funcionalidades administrativas com o dataset importado, crie um administrador de demonstração separadamente:
@@ -310,3 +330,23 @@ Os comandos Artisan em [`app/Console/Commands/`](app/Console/Commands/) possibil
 | `benchmarks/` | Resultados das 50 execuções experimentais originais. |
 
 Os testes automatizados encontram-se em `tests/Unit/` (estrutura, conversão e métricas de grafos) e `tests/Feature/` (autenticação, CRUDs, rotas e serialização). As factories em `database/factories/` auxiliam na preparação dos dados de teste.
+
+## Licença
+
+O código-fonte autoral do DDI-Graph é disponibilizado sob a licença [MIT](LICENSE).
+
+O projeto foi desenvolvido como Trabalho de Conclusão de Curso do curso Técnico em Informática do Instituto Federal do Paraná (IFPR) - Campus Paranaguá.
+
+### Dados experimentais
+
+As bases de dados utilizadas nos experimentos possuem condições próprias de licenciamento:
+
+- [DDInter](https://ddinter.scbdd.com/): CC BY-NC-SA 4.0.
+- [mnarayan1/DDInter](https://github.com/mnarayan1/DDInter): sem licença própria explicitamente declarada.
+- [ATC-drugs-class.db](https://github.com/theoffbeatdoc/ATC-drugs-class.db): CC BY-SA 4.0.
+
+Os conjuntos de dados originais e processados não são distribuídos neste repositório, cabendo ao usuário obtê-los em suas respectivas fontes e observar suas condições de utilização.
+
+São disponibilizados os scripts de processamento, os procedimentos experimentais e os resultados agregados obtidos durante a pesquisa, visando à sua reprodutibilidade.
+
+A licença MIT não se estende aos dados ou aos componentes de terceiros.
